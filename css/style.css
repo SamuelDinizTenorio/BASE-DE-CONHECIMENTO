@@ -139,11 +139,14 @@ article p strong {
 article a {
     color: var(--primary-color); /* Cor do link */
     text-decoration: none; /* Remove o sublinhado padrão */
-    font-weight: 200; /* Peso da fonte */
+    font-weight: 500; /* Peso da fonte */
+    position: relative; /* Necessário para o pseudo-elemento ::after */
+    transition: color 0.3s ease; /* Transição suave para a cor */
 }
 
 article a:hover {
-    text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
+    color: #a8c7fa; /* Um tom um pouco mais claro do azul primário */
+    text-decoration: underline;
 }
 
 .footer {
@@ -174,11 +177,38 @@ article a:hover {
 .footer-links a {
     color: var(--secondary-color); /* Cor do link */
     text-decoration: none; /* Remove o sublinhado */
-    transition: color 0.2s; /* Transição suave para a cor */
+    transition: transform 0.3s ease; /* Transição suave para transformação */
+    display: inline-flex; /* Usa flexbox para alinhamento interno */
+    align-items: center; /* Centraliza verticalmente o conteúdo do link (ícone/imagem) */
+    justify-content: center; /* Centraliza horizontalmente (bom para consistência) */
+    font-size: 1.8rem; /* Aumenta o tamanho dos ícones */
 }
 
 .footer-links a:hover {
-    color: var(--accent-color); /* Muda a cor do link ao passar o mouse (variável não definida) */
+    color: var(--primary-color); /* Usa a cor primária ao passar o mouse */
+    transform: scale(1.2); /* Aumenta o tamanho do ícone para dar feedback */
+}
+
+.fa-linkedin {
+    background-color: #FFFFFF; /* Define o fundo do ícone como azul */
+    color: #0077B5; /* Define a cor das letras ("in") como branco */
+    border-radius: 4px; /* Adiciona um leve arredondamento para suavizar as bordas */
+    font-size: 1.5rem; /* Reduz um pouco o tamanho do glifo interno */
+    padding: 0.15rem; /* Adiciona um pequeno preenchimento para criar o fundo */
+    box-sizing: content-box; /* Garante que o padding aumente o tamanho total */
+}
+
+/* Efeito de brilho no hover para os ícones com cores originais */
+.footer-links a:hover .fa-github,
+.footer-links a:hover .fa-linkedin {
+    filter: brightness(0.9); /* Escurece um pouco o ícone ao passar o mouse */
+}
+
+.footer-links a img {
+    height: 1.8rem; /* Define a altura da imagem igual ao font-size dos outros ícones */
+    width: auto; /* Deixa a largura se ajustar para manter a proporção */
+    vertical-align: middle; /* Alinha a imagem verticalmente com os outros ícones */
+
 }
 
 @media (max-width: 768px) {
