@@ -8,10 +8,14 @@ let cardContainer = document.querySelector(".card-container"); // O elemento con
 let searchField  = document.querySelector("#searchField"); // O campo de input para a busca de cards.
 let cardsData = []; // Armazena os dados carregados do JSON para evitar múltiplas requisições.
 
+const API_ENDPOINT = 'https://api/knowledge'; // URL DA API
+const FALLBACK_FILE = 'data.json'; // Arquivo de fallback
+
 // Adiciona um ouvinte de eventos para o campo de busca, acionando a filtragem a cada tecla digitada.
 searchField .addEventListener("input", handleSearch);
 
 /**
+ * Tenta carregar os dados de um endpoint de API. Se falhar, chama a função de fallback.
  * Carrega os dados de um arquivo JSON externo de forma assíncrona.
  * Após o carregamento, armazena os dados na variável `cardsData` e chama `renderCards`
  * para exibir todos os itens na tela. Em caso de falha, registra um erro no console.
@@ -19,14 +23,34 @@ searchField .addEventListener("input", handleSearch);
  */
 async function loadData() {
     try {
-        let response = await fetch("data.json");
+        console.log(`Tentando carregar dados de: ${API_ENDPOINT}`);
+        const response = await fetch(API_ENDPOINT);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         cardsData = await response.json();
-        renderCards(cardsData); // Renderiza todos os cards inicialmente
+        renderCards(cardsData);
+        console.log("Dados carregados com sucesso do endpoint da API.");
     } catch (error) {
-        console.error("Não foi possível carregar os dados:", error);
+        console.warn(`Falha ao carregar dados da API (${API_ENDPOINT}). Acionando fallback.`, error);
+        await loadFallbackData();
+    }
+};
+
+/**
+ * Carrega os dados do arquivo JSON local como uma alternativa (fallback).
+ * É chamada quando a tentativa de carregar os dados da API principal falha.
+ */
+async function loadFallbackData() {
+    try {
+        console.log(`Tentando carregar dados do arquivo local: ${FALLBACK_FILE}`);
+        const response = await fetch(FALLBACK_FILE);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        cardsData = await response.json();
+        renderCards(cardsData);
+        console.log("Dados carregados com sucesso do arquivo de fallback.");
+    } catch (fallbackError) {
+        console.error("Falha crítica: Não foi possível carregar os dados da API nem do arquivo local.", fallbackError);
     }
 };
 
@@ -54,10 +78,15 @@ function renderCards(data) {
         let card = document.createElement("article");
         card.classList.add("card");
 
+        const tagsHtml = item.tags.map(tag => `<span>${tag}</span>`).join('');
+
         card.innerHTML = `
             <h2>${item.name}</h2>
-            <p>${item.year}</p>
+            <p class="year">Ano de criação: ${item.year_creation}</p>
             <p>${item.description}</p>
+            <div class="tags-container">
+                ${tagsHtml}
+            </div>
             <a href="${item.link}" target="_blank" rel="noopener noreferrer">Saiba mais</a>
         `;
 

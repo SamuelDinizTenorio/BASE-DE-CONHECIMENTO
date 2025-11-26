@@ -5,10 +5,10 @@
 }
 
 :root {
-    --primary-color: #8ab4f8; /* Cor primária (azul claro) */
-    --secondary-color: #e8eaed; /* Cor secundária (cinza claro) */
-    --tertiary-color: #9aa0a6; /* Cor terciária (cinza médio) */
-    --bg-color: #202124; /* Cor de fundo (cinza escuro) */
+    --primary-color: #c792ea; /* Cor primária (Roxo vibrante) */
+    --secondary-color: #e0e0e0; /* Cor secundária (Cinza claro, quase branco) */
+    --tertiary-color: #82aaff; /* Cor terciária (Azul suave para detalhes) */
+    --bg-color: #1a202c; /* Cor de fundo (Azul-marinho escuro) */
 }
 
 body {
@@ -142,11 +142,38 @@ article a {
     font-weight: 500; /* Peso da fonte */
     position: relative; /* Necessário para o pseudo-elemento ::after */
     transition: color 0.3s ease; /* Transição suave para a cor */
+    display: block; /* Garante que a margem superior funcione corretamente */
+    margin-top: 1rem; /* Adiciona espaço acima do link */
 }
 
 article a:hover {
     color: #a8c7fa; /* Um tom um pouco mais claro do azul primário */
     text-decoration: underline;
+}
+
+/* Estilos para o container de tags */
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* Estilos para cada tag individual */
+.tags-container span {
+    background-color: #3c4043; /* Um cinza um pouco mais claro que o fundo */
+    color: var(--secondary-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    cursor: pointer; /* Indica que a tag é clicável */
+}
+
+.tags-container span:hover {
+    background-color: var(--primary-color);
+    color: var(--bg-color);
 }
 
 .footer {

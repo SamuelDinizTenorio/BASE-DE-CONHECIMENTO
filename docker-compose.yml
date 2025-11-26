@@ -1,0 +1,33 @@
+services:
+  # Define o serviço para a aplicação web
+  web:
+    # Instrui o Compose a construir a imagem a partir do Dockerfile no diretório atual (.)
+    build: .
+    # Define um nome para o contêiner para fácil identificação
+    container_name: base-conhecimento-app
+    # Mapeia a porta 8080 do seu computador (host) para a porta 80 do contêiner (onde o Nginx está rodando)
+    ports:
+      - "8080:80"
+    # Torna o sistema de arquivos do contêiner somente leitura para aumentar a segurança.
+    read_only: true
+    # Monta um sistema de arquivos temporário em memória para os diretórios que o Nginx precisa escrever.
+    tmpfs:
+      - /var/run
+      - /var/cache/nginx
+    # Política de reinicialização: reinicia o contêiner automaticamente a menos que seja parado manualmente
+    restart: unless-stopped
+    # Define limites de recursos para o contêiner para evitar o consumo excessivo de recursos do host.
+    deploy:
+      resources:
+        limits:
+          # Limita o uso de CPU a 25% de um núcleo.
+          cpus: '0.25'
+          # Limita o uso de memória RAM a 128MB.
+          memory: 128M
+    # Adiciona uma verificação de saúde para garantir que o Nginx está respondendo corretamente.
+    healthcheck:
+      # Comando para verificar a saúde: tenta acessar a página inicial via curl.
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
